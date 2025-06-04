@@ -7,4 +7,13 @@ export class CriticalAlertsWeb extends WebPlugin implements CriticalAlertsPlugin
     console.log('ECHO', options);
     return options;
   }
+  async requestPermission(): Promise<{ granted: boolean }> {
+    console.warn('CriticalAlerts plugin not available on web');
+    return { granted: false };
+  }
+
+  async checkPermission(): Promise<{ authorized: boolean; criticalAlert: boolean }> {
+    console.warn('CriticalAlerts plugin not available on web');
+    return { authorized: false, criticalAlert: false };
+  }
 }

@@ -5,4 +5,12 @@ import Foundation
         print(value)
         return value
     }
+     @objc public func requestPermission(_ value: String) -> String {
+        print(value)
+        return value
+    }
+     @objc public func checkPermission(_ value: String) -> String {
+        print(value)
+        return value
+    }
 }

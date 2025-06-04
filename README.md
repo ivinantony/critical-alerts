@@ -14,6 +14,8 @@ npx cap sync
 <docgen-index>
 
 * [`echo(...)`](#echo)
+* [`requestPermission()`](#requestpermission)
+* [`checkPermission()`](#checkpermission)
 
 </docgen-index>
 
@@ -31,6 +33,28 @@ echo(options: { value: string; }) => Promise<{ value: string; }>
 | **`options`** | <code>{ value: string; }</code> |
 
 **Returns:** <code>Promise&lt;{ value: string; }&gt;</code>
+
+--------------------
+
+
+### requestPermission()
+
+```typescript
+requestPermission() => Promise<{ granted: boolean; }>
+```
+
+**Returns:** <code>Promise&lt;{ granted: boolean; }&gt;</code>
+
+--------------------
+
+
+### checkPermission()
+
+```typescript
+checkPermission() => Promise<{ authorized: boolean; criticalAlert: boolean; }>
+```
+
+**Returns:** <code>Promise&lt;{ authorized: boolean; criticalAlert: boolean; }&gt;</code>
 
 --------------------
 
