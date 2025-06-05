@@ -4,7 +4,7 @@ import android.app.NotificationManager;
 import android.content.Intent;
 import android.os.Build;
 import android.provider.Settings;
-
+import android.content.Context;
 import com.getcapacitor.JSObject;
 
 import com.getcapacitor.JSObject;
