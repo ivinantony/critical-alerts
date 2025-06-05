@@ -16,6 +16,8 @@ npx cap sync
 * [`echo(...)`](#echo)
 * [`requestPermission()`](#requestpermission)
 * [`checkPermission()`](#checkpermission)
+* [`checkDndAccess()`](#checkdndaccess)
+* [`openDndSettings()`](#opendndsettings)
 
 </docgen-index>
 
@@ -55,6 +57,28 @@ checkPermission() => Promise<{ authorized: boolean; criticalAlert: boolean; }>
 ```
 
 **Returns:** <code>Promise&lt;{ authorized: boolean; criticalAlert: boolean; }&gt;</code>
+
+--------------------
+
+
+### checkDndAccess()
+
+```typescript
+checkDndAccess() => Promise<{ granted: boolean; }>
+```
+
+**Returns:** <code>Promise&lt;{ granted: boolean; }&gt;</code>
+
+--------------------
+
+
+### openDndSettings()
+
+```typescript
+openDndSettings() => Promise<{ granted: boolean; }>
+```
+
+**Returns:** <code>Promise&lt;{ granted: boolean; }&gt;</code>
 
 --------------------
 
