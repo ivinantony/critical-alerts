@@ -50,4 +50,38 @@ public class CriticalAlertsPlugin extends Plugin {
             call.reject("DND settings not available on this version");
         }
     }
+
+    @PluginMethod
+public void createBypassDndChannel(PluginCall call) {
+    String channelId = call.getString("id");
+    String name = call.getString("name", "Default");
+    String description = call.getString("description", "");
+    String soundName = call.getString("sound", "default");
+
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        NotificationManager notificationManager = (NotificationManager) getContext().getSystemService(Context.NOTIFICATION_SERVICE);
+
+        // Sound URI
+        Uri soundUri = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + getContext().getPackageName() + "/raw/" + soundName);
+
+        AudioAttributes audioAttributes = new AudioAttributes.Builder()
+            .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+            .setUsage(AudioAttributes.USAGE_NOTIFICATION)
+            .build();
+
+        NotificationChannel channel = new NotificationChannel(channelId, name, NotificationManager.IMPORTANCE_HIGH);
+        channel.setDescription(description);
+        channel.enableLights(true);
+        channel.enableVibration(true);
+        channel.setSound(soundUri, audioAttributes);
+        channel.setBypassDnd(true); // 🔥 This is the critical line
+        channel.setLockscreenVisibility(Notification.VISIBILITY_PUBLIC);
+
+        notificationManager.createNotificationChannel(channel);
+        call.resolve();
+    } else {
+        call.reject("Notification channels require Android O or higher.");
+    }
+}
+
 }
