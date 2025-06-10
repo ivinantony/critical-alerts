@@ -50,12 +50,21 @@ public class CriticalAlertsPlugin: CAPPlugin, CAPBridgedPlugin {
         }
     }
 
-    func openAppSettings() {
+   @objc func openAppSettings(_ call: CAPPluginCall) {
     guard let url = URL(string: UIApplication.openSettingsURLString),
           UIApplication.shared.canOpenURL(url) else {
+        call.reject("Cannot open settings")
         return
     }
-    UIApplication.shared.open(url, options: [:], completionHandler: nil)
+
+    UIApplication.shared.open(url, options: [:]) { success in
+        if success {
+            call.resolve(["opened": true])
+        } else {
+            call.reject("Failed to open settings")
+        }
+    }
 }
+
 
 }
