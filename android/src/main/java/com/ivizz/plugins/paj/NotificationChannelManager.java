@@ -104,8 +104,6 @@ public class NotificationChannelManager {
              // ✅ Add debug logs here
         NotificationManager nm = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         android.util.Log.d("ChannelDebug", "DND Access Granted: " + nm.isNotificationPolicyAccessGranted());
-        android.util.Log.d("ChannelDebug", "Channel Importance: " + importance);
-        android.util.Log.d("ChannelDebug", "Sound URI: " + (soundUri != null ? soundUri.toString() : "null"));
         android.util.Log.d("ChannelDebug", "Bypass DND (requested): " + channel.getBool(BYPASS_DND));
         android.util.Log.d("ChannelDebug", "Bypass DND (channel object): " + notificationChannel.canBypassDnd());
 
