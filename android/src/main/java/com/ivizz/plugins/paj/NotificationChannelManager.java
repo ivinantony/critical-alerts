@@ -95,8 +95,8 @@ public class NotificationChannelManager {
                 }
                 AudioAttributes audioAttributes = new AudioAttributes.Builder()
                     .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
-                    //  .setUsage(AudioAttributes.USAGE_NOTIFICATION)
-                   .setUsage(AudioAttributes.USAGE_ALARM)
+                     .setUsage(AudioAttributes.USAGE_NOTIFICATION)
+                //    .setUsage(AudioAttributes.USAGE_ALARM)
                     .build();
                 Uri soundUri = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + context.getPackageName() + "/raw/" + sound);
                 notificationChannel.setSound(soundUri, audioAttributes);
