@@ -17,7 +17,15 @@ import com.getcapacitor.annotation.CapacitorPlugin;
 public class CriticalAlertsPlugin extends Plugin {
 
     private CriticalAlerts implementation = new CriticalAlerts();
+     public NotificationManager notificationManager;
     private NotificationChannelManager notificationChannelManager;
+
+
+  public void load() {
+    notificationManager = (NotificationManager) getActivity().getSystemService(Context.NOTIFICATION_SERVICE);
+    notificationChannelManager = new NotificationChannelManager(getActivity(), notificationManager, getConfig());
+  }
+
     @PluginMethod
     public void echo(PluginCall call) {
         String value = call.getString("value");
