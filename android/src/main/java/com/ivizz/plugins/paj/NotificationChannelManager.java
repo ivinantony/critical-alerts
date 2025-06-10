@@ -79,7 +79,7 @@ public class NotificationChannelManager {
             notificationChannel.setLockscreenVisibility(channel.getInteger(CHANNEL_VISIBILITY));
             notificationChannel.enableVibration(channel.getBool(CHANNEL_VIBRATE));
             notificationChannel.enableLights(channel.getBool(CHANNEL_USE_LIGHTS));
-            notificationChannel.setBypassDnd(channel.getBool(BYPASS_DND, false));
+            notificationChannel.setBypassDnd(channel.getBool(BYPASS_DND));
             String lightColor = channel.getString(CHANNEL_LIGHT_COLOR);
             if (lightColor != null) {
                 try {
