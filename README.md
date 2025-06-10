@@ -1,6 +1,6 @@
 # critical-alerts
 
-Plugin for iOS Critical Alerts
+Plugin for  Critical Alerts   in IOS & ANDROID
 
 ## Install
 
@@ -14,7 +14,7 @@ npx cap sync
 <docgen-index>
 
 * [`echo(...)`](#echo)
-* [`requestPermission()`](#requestpermission)
+* [`requestPermission()`](#requestpermission)  
 * [`checkPermission()`](#checkpermission)
 * [`checkDndAccess()`](#checkdndaccess)
 * [`openDndSettings()`](#opendndsettings)
@@ -39,9 +39,9 @@ echo(options: { value: string; }) => Promise<{ value: string; }>
 --------------------
 
 
-### requestPermission()
+### requestPermission()  
 
-```typescript
+```typescript [IOS ONLY]
 requestPermission() => Promise<{ granted: boolean; }>
 ```
 
@@ -52,7 +52,7 @@ requestPermission() => Promise<{ granted: boolean; }>
 
 ### checkPermission()
 
-```typescript
+```typescript  [IOS ONLY]
 checkPermission() => Promise<{ authorized: boolean; criticalAlert: boolean; }>
 ```
 
@@ -63,7 +63,7 @@ checkPermission() => Promise<{ authorized: boolean; criticalAlert: boolean; }>
 
 ### checkDndAccess()
 
-```typescript
+```typescript [ANDROID ONLY]
 checkDndAccess() => Promise<{ granted: boolean; }>
 ```
 
@@ -74,7 +74,7 @@ checkDndAccess() => Promise<{ granted: boolean; }>
 
 ### openDndSettings()
 
-```typescript
+```typescript [ANDROID ONLY]
 openDndSettings() => Promise<{ granted: boolean; }>
 ```
 
