@@ -16,6 +16,11 @@ export class CriticalAlertsWeb extends WebPlugin implements CriticalAlertsPlugin
     console.warn('CriticalAlerts plugin not available on web');
     return { authorized: false, criticalAlert: false };
   }
+  async openAppSettings(): Promise<{ granted: boolean }> {
+    console.warn('CriticalAlerts plugin not available on web');
+    return { granted: false };
+  }
+  
   async checkDndAccess(): Promise<{ granted: boolean }> {
     console.warn('CriticalAlerts plugin not available on web');
     return { granted: false };

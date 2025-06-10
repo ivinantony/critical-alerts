@@ -13,4 +13,10 @@ import Foundation
         print(value)
         return value
     }
+     @objc public func openAppSettings(_ value: String) -> String {
+        print(value)
+        return value
+    }
+  
+
 }

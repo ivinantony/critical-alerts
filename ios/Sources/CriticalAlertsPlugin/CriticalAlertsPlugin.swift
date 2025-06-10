@@ -1,6 +1,7 @@
 import Foundation
 import Capacitor
 import UserNotifications
+import UIKit
 /**
  * Please read the Capacitor iOS Plugin Development Guide
  * here: https://capacitorjs.com/docs/plugins/ios
@@ -48,4 +49,13 @@ public class CriticalAlertsPlugin: CAPPlugin, CAPBridgedPlugin {
             }
         }
     }
+
+    func openAppSettings() {
+    guard let url = URL(string: UIApplication.openSettingsURLString),
+          UIApplication.shared.canOpenURL(url) else {
+        return
+    }
+    UIApplication.shared.open(url, options: [:], completionHandler: nil)
+}
+
 }

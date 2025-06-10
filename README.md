@@ -16,6 +16,7 @@ npx cap sync
 * [`echo(...)`](#echo)
 * [`requestPermission()`](#requestpermission)
 * [`checkPermission()`](#checkpermission)
+* [`openAppSettings()`](#openappsettings)
 * [`checkDndAccess()`](#checkdndaccess)
 * [`openDndSettings()`](#opendndsettings)
 * [`createChannel(...)`](#createchannel)
@@ -60,6 +61,17 @@ checkPermission() => Promise<{ authorized: boolean; criticalAlert: boolean; }>
 ```
 
 **Returns:** <code>Promise&lt;{ authorized: boolean; criticalAlert: boolean; }&gt;</code>
+
+--------------------
+
+
+### openAppSettings()
+
+```typescript
+openAppSettings() => Promise<{ granted: boolean; }>
+```
+
+**Returns:** <code>Promise&lt;{ granted: boolean; }&gt;</code>
 
 --------------------
 
