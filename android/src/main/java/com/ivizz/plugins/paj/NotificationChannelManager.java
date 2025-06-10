@@ -62,7 +62,7 @@ public class NotificationChannelManager {
             channel.put(CHANNEL_USE_LIGHTS, call.getBoolean(CHANNEL_USE_LIGHTS, false));
             channel.put(CHANNEL_LIGHT_COLOR, call.getString(CHANNEL_LIGHT_COLOR, null));
             createChannel(channel);
-            call.resolve();
+            call.resolve(channel);
         } else {
             call.unavailable();
         }
@@ -101,7 +101,16 @@ public class NotificationChannelManager {
                 Uri soundUri = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + context.getPackageName() + "/raw/" + sound);
                 notificationChannel.setSound(soundUri, audioAttributes);
             }
-            notificationManager.createNotificationChannel(notificationChannel);
+             // ✅ Add debug logs here
+        NotificationManager nm = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        android.util.Log.d("ChannelDebug", "DND Access Granted: " + nm.isNotificationPolicyAccessGranted());
+        android.util.Log.d("ChannelDebug", "Channel Importance: " + importance);
+        android.util.Log.d("ChannelDebug", "Sound URI: " + (soundUri != null ? soundUri.toString() : "null"));
+        android.util.Log.d("ChannelDebug", "Bypass DND (requested): " + channel.getBool(BYPASS_DND));
+        android.util.Log.d("ChannelDebug", "Bypass DND (channel object): " + notificationChannel.canBypassDnd());
+
+        notificationManager.createNotificationChannel(notificationChannel);
+            
         }
     }
 
