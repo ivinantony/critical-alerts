@@ -39,9 +39,9 @@ echo(options: { value: string; }) => Promise<{ value: string; }>
 --------------------
 
 
-### requestPermission()  
+### requestPermission()  [IOS ONLY]
 
-```typescript [IOS ONLY]
+```typescript 
 requestPermission() => Promise<{ granted: boolean; }>
 ```
 
@@ -50,9 +50,9 @@ requestPermission() => Promise<{ granted: boolean; }>
 --------------------
 
 
-### checkPermission()
+### checkPermission()  [IOS ONLY]
 
-```typescript  [IOS ONLY]
+```typescript  
 checkPermission() => Promise<{ authorized: boolean; criticalAlert: boolean; }>
 ```
 
@@ -61,9 +61,9 @@ checkPermission() => Promise<{ authorized: boolean; criticalAlert: boolean; }>
 --------------------
 
 
-### checkDndAccess()
+### checkDndAccess() [ANDROID ONLY]
 
-```typescript [ANDROID ONLY]
+```typescript 
 checkDndAccess() => Promise<{ granted: boolean; }>
 ```
 
@@ -72,9 +72,9 @@ checkDndAccess() => Promise<{ granted: boolean; }>
 --------------------
 
 
-### openDndSettings()
+### openDndSettings() [ANDROID ONLY]
 
-```typescript [ANDROID ONLY]
+```typescript 
 openDndSettings() => Promise<{ granted: boolean; }>
 ```
 
