@@ -14,10 +14,13 @@ npx cap sync
 <docgen-index>
 
 * [`echo(...)`](#echo)
-* [`requestPermission()`](#requestpermission)  
+* [`requestPermission()`](#requestpermission)
 * [`checkPermission()`](#checkpermission)
 * [`checkDndAccess()`](#checkdndaccess)
 * [`openDndSettings()`](#opendndsettings)
+* [`createChannel(...)`](#createchannel)
+* [Interfaces](#interfaces)
+* [Type Aliases](#type-aliases)
 
 </docgen-index>
 
@@ -39,9 +42,9 @@ echo(options: { value: string; }) => Promise<{ value: string; }>
 --------------------
 
 
-### requestPermission()  [IOS ONLY]
+### requestPermission()
 
-```typescript 
+```typescript
 requestPermission() => Promise<{ granted: boolean; }>
 ```
 
@@ -50,9 +53,9 @@ requestPermission() => Promise<{ granted: boolean; }>
 --------------------
 
 
-### checkPermission()  [IOS ONLY]
+### checkPermission()
 
-```typescript  
+```typescript
 checkPermission() => Promise<{ authorized: boolean; criticalAlert: boolean; }>
 ```
 
@@ -61,9 +64,9 @@ checkPermission() => Promise<{ authorized: boolean; criticalAlert: boolean; }>
 --------------------
 
 
-### checkDndAccess() [ANDROID ONLY]
+### checkDndAccess()
 
-```typescript 
+```typescript
 checkDndAccess() => Promise<{ granted: boolean; }>
 ```
 
@@ -72,14 +75,59 @@ checkDndAccess() => Promise<{ granted: boolean; }>
 --------------------
 
 
-### openDndSettings() [ANDROID ONLY]
+### openDndSettings()
 
-```typescript 
+```typescript
 openDndSettings() => Promise<{ granted: boolean; }>
 ```
 
 **Returns:** <code>Promise&lt;{ granted: boolean; }&gt;</code>
 
 --------------------
+
+
+### createChannel(...)
+
+```typescript
+createChannel(channel: Channel) => Promise<void>
+```
+
+| Param         | Type                                        |
+| ------------- | ------------------------------------------- |
+| **`channel`** | <code><a href="#channel">Channel</a></code> |
+
+--------------------
+
+
+### Interfaces
+
+
+#### Channel
+
+| Prop              | Type                                              | Description                                                                                                                                                                                                                                                | Default          | Since |
+| ----------------- | ------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------- | ----- |
+| **`id`**          | <code>string</code>                               | The channel identifier.                                                                                                                                                                                                                                    |                  | 1.0.0 |
+| **`name`**        | <code>string</code>                               | The human-friendly name of this channel (presented to the user).                                                                                                                                                                                           |                  | 1.0.0 |
+| **`description`** | <code>string</code>                               | The description of this channel (presented to the user).                                                                                                                                                                                                   |                  | 1.0.0 |
+| **`sound`**       | <code>string</code>                               | The sound that should be played for notifications posted to this channel. Notification channels with an importance of at least `3` should have a sound. The file name of a sound file should be specified relative to the android app `res/raw` directory. |                  | 1.0.0 |
+| **`importance`**  | <code><a href="#importance">Importance</a></code> | The level of interruption for notifications posted to this channel.                                                                                                                                                                                        | <code>`3`</code> | 1.0.0 |
+| **`visibility`**  | <code><a href="#visibility">Visibility</a></code> | The visibility of notifications posted to this channel. This setting is for whether notifications posted to this channel appear on the lockscreen or not, and if so, whether they appear in a redacted form.                                               |                  | 1.0.0 |
+| **`lights`**      | <code>boolean</code>                              | Whether notifications posted to this channel should display notification lights, on devices that support it.                                                                                                                                               |                  | 1.0.0 |
+| **`lightColor`**  | <code>string</code>                               | The light color for notifications posted to this channel. Only supported if lights are enabled on this channel and the device supports it. Supported color formats are `#RRGGBB` and `#RRGGBBAA`.                                                          |                  | 1.0.0 |
+| **`vibration`**   | <code>boolean</code>                              | Whether notifications posted to this channel should vibrate.                                                                                                                                                                                               |                  | 1.0.0 |
+| **`bypassDnd`**   | <code>boolean</code>                              | Whether notifications posted in dnd or doze mode .                                                                                                                                                                                                         |                  | 1.0.0 |
+
+
+### Type Aliases
+
+
+#### Importance
+
+<code>1 | 2 | 3 | 4 | 5</code>
+
+
+#### Visibility
+
+<code>-1 | 0 | 1</code>
 
 </docgen-api>

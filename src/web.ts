@@ -24,4 +24,7 @@ export class CriticalAlertsWeb extends WebPlugin implements CriticalAlertsPlugin
     console.warn('CriticalAlerts plugin not available on web');
     return { granted: false };
   }
+  async createChannel(): Promise<void> {
+    console.warn('CriticalAlerts plugin not available on web');
+  }
 }
