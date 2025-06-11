@@ -13,7 +13,7 @@ public class CriticalAlertsPlugin: CAPPlugin, CAPBridgedPlugin {
     public let pluginMethods: [CAPPluginMethod] = [
         CAPPluginMethod(name: "echo", returnType: CAPPluginReturnPromise),
          CAPPluginMethod(name: "requestPermission", returnType: CAPPluginReturnPromise),
-        CAPPluginMethod(name: "checkPermission", returnType: CAPPluginReturnPromise)
+        CAPPluginMethod(name: "checkPermission", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "openAppSettings", returnType: CAPPluginReturnPromise)
         
     ]
