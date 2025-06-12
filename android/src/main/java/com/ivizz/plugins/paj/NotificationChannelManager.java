@@ -129,15 +129,26 @@ public void deleteAllChannel(PluginCall call) {
 }
 
 
-    public void deleteChannel(PluginCall call) {
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-            String channelId = call.getString("id");
-            notificationManager.deleteNotificationChannel(channelId);
+   @PluginMethod
+public void deleteAllChannel(PluginCall call) {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        NotificationManager notificationManager =
+            (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+
+        if (notificationManager != null) {
+            List<NotificationChannel> channels = notificationManager.getNotificationChannels();
+            for (NotificationChannel channel : channels) {
+                notificationManager.deleteNotificationChannel(channel.getId());
+            }
             call.resolve();
         } else {
-            call.unavailable();
+            call.reject("NotificationManager is null");
         }
+    } else {
+        call.unavailable("Notification channels are not supported below Android O (API 26).");
     }
+}
+
 
     // public void listChannels(PluginCall call) {
     //     if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {

@@ -6,6 +6,7 @@ export interface CriticalAlertsPlugin {
   checkDndAccess(): Promise<{ granted: boolean }>;
   openDndSettings(): Promise<{ granted: boolean }>;
   createChannel(channel: Channel): Promise<void>;
+  deleteAllChannel(): Promise<void>;
 }
 
 export interface Channel {
