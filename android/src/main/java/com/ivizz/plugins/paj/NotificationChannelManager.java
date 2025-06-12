@@ -80,20 +80,6 @@ public class NotificationChannelManager {
             notificationChannel.enableVibration(channel.getBool(CHANNEL_VIBRATE));
             notificationChannel.enableLights(channel.getBool(CHANNEL_USE_LIGHTS));
             notificationChannel.setBypassDnd(channel.getBool(BYPASS_DND));
-
-//             boolean bypassDnd = channel.getBool(BYPASS_DND);
-
-// NotificationManager nm = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-// boolean hasDndAccess = nm.isNotificationPolicyAccessGranted();
-
-// android.util.Log.d("ChannelDebug", "DND Access Granted: " + hasDndAccess);
-// android.util.Log.d("ChannelDebug", "Bypass DND Requested: " + bypassDnd);
-
-// if (bypassDnd && !hasDndAccess) {
-//     android.util.Log.w("ChannelDebug", "bypassDnd=true requested, but app does NOT have DND access. Disabling bypassDnd.");
-//     bypassDnd = false;
-// }
-// notificationChannel.setBypassDnd(bypassDnd);
          
             String lightColor = channel.getString(CHANNEL_LIGHT_COLOR);
             if (lightColor != null) {
@@ -121,16 +107,37 @@ public class NotificationChannelManager {
             
         }
     }
+@PluginMethod
+public void deleteAllChannel(PluginCall call) {
+    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+        NotificationManager notificationManager =
+            (NotificationManager) getContext().getSystemService(Context.NOTIFICATION_SERVICE);
 
-    // public void deleteChannel(PluginCall call) {
-    //     if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-    //         String channelId = call.getString("id");
-    //         notificationManager.deleteNotificationChannel(channelId);
-    //         call.resolve();
-    //     } else {
-    //         call.unavailable();
-    //     }
-    // }
+        if (notificationManager != null) {
+            List<NotificationChannel> channels = notificationManager.getNotificationChannels();
+            for (NotificationChannel channel : channels) {
+                notificationManager.deleteNotificationChannel(channel.getId());
+            }
+            call.resolve();
+        } else {
+            call.reject("NotificationManager is null");
+        }
+
+    } else {
+        call.unavailable("Notification channels are not supported below Android O (API 26).");
+    }
+}
+
+
+    public void deleteChannel(PluginCall call) {
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            String channelId = call.getString("id");
+            notificationManager.deleteNotificationChannel(channelId);
+            call.resolve();
+        } else {
+            call.unavailable();
+        }
+    }
 
     // public void listChannels(PluginCall call) {
     //     if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {

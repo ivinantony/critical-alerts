@@ -63,6 +63,12 @@ public class CriticalAlertsPlugin extends Plugin {
     public void createChannel(PluginCall call) {
         notificationChannelManager.createChannel(call);
     }
+
+ @PluginMethod
+    public void deleteAllChannel(PluginCall call) {
+        notificationChannelManager.deleteAllChannel(call);
+    }
+    
 //     @PluginMethod
 // public void createBypassDndChannel(PluginCall call) {
 //     String channelId = call.getString("id");

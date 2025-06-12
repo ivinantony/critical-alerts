@@ -32,4 +32,9 @@ export class CriticalAlertsWeb extends WebPlugin implements CriticalAlertsPlugin
   async createChannel(): Promise<void> {
     console.warn('CriticalAlerts plugin not available on web');
   }
+  async deleteAllChannel(): Promise<void> {
+    console.warn('deleteAllChannel is not available on the web.');
+    // Stub: resolve immediately without doing anything
+    return;
+  }
 }
