@@ -110,8 +110,9 @@ public class NotificationChannelManager {
 
 public void deleteAllChannel(PluginCall call) {
     if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-        NotificationManager notificationManager =
-            (NotificationManager) getContext().getSystemService(Context.NOTIFICATION_SERVICE);
+       NotificationManager notificationManager =
+    (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+
 
         if (notificationManager != null) {
             List<NotificationChannel> channels = notificationManager.getNotificationChannels();
