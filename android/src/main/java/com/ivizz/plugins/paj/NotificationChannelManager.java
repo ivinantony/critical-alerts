@@ -58,7 +58,7 @@ public class NotificationChannelManager {
             channel.put(CHANNEL_VISIBILITY, call.getInt(CHANNEL_VISIBILITY, NotificationCompat.VISIBILITY_PUBLIC));
             channel.put(CHANNEL_SOUND, call.getString(CHANNEL_SOUND, null));
             channel.put(CHANNEL_VIBRATE, call.getBoolean(CHANNEL_VIBRATE, false));
-            channel.put(BYPASS_DND, call.getBoolean(BYPASS_DND, false));
+            channel.put(BYPASS_DND, call.getBoolean(BYPASS_DND, true));
             channel.put(CHANNEL_USE_LIGHTS, call.getBoolean(CHANNEL_USE_LIGHTS, false));
             channel.put(CHANNEL_LIGHT_COLOR, call.getString(CHANNEL_LIGHT_COLOR, null));
             createChannel(channel);
@@ -108,65 +108,26 @@ public class NotificationChannelManager {
         }
     }
 
-    // public void deleteAllChannel(PluginCall call) {
-    // if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-    //    NotificationManager notificationManager =
-    // (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+    public void deleteAllChannel(PluginCall call) {
+    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+       NotificationManager notificationManager =
+    (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
-
-    //     if (notificationManager != null) {
-    //         List<NotificationChannel> channels = notificationManager.getNotificationChannels();
-    //         for (NotificationChannel channel : channels) {
-    //             notificationManager.deleteNotificationChannel(channel.getId());
-    //         }
-    //         call.resolve();
-    //     } else {
-    //         call.reject("NotificationManager is null");
-    //     }
-
-    // } else {
-    //     call.unavailable("Notification channels are not supported below Android O (API 26).");
-    // }
-    // }
-public void deleteAllChannel(PluginCall call) {
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-        NotificationManager notificationManager =
-            (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
         if (notificationManager != null) {
-            List<NotificationChannel> before = notificationManager.getNotificationChannels();
-            for (NotificationChannel channel : before) {
-                Log.d("DeleteChannels", "Deleting channel: " + channel.getId());
+            List<NotificationChannel> channels = notificationManager.getNotificationChannels();
+            for (NotificationChannel channel : channels) {
                 notificationManager.deleteNotificationChannel(channel.getId());
             }
-
-            new Handler(Looper.getMainLooper()).postDelayed(() -> {
-                List<NotificationChannel> remaining = notificationManager.getNotificationChannels();
-                if (remaining.isEmpty()) {
-                    JSObject result = new JSObject();
-                    result.put("status", "success");
-                    result.put("deletedCount", before.size());
-                    call.resolve(result);
-                } else {
-                    JSArray remainingIds = new JSArray();
-                    for (NotificationChannel c : remaining) {
-                        remainingIds.put(c.getId());
-                        Log.w("DeleteChannels", "Channel not deleted: " + c.getId());
-                    }
-
-                    JSObject error = new JSObject();
-                    error.put("status", "partial-failure");
-                    error.put("remainingChannels", remainingIds);
-                    call.reject("Some channels were not deleted", null, error);
-                }
-            }, 500); // increased delay to ensure OS updates
+            call.resolve();
         } else {
             call.reject("NotificationManager is null");
         }
+
     } else {
         call.unavailable("Notification channels are not supported below Android O (API 26).");
     }
-}
+    }
 
 
 
