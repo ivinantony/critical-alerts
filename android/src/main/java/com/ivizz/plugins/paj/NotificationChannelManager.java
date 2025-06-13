@@ -107,27 +107,49 @@ public class NotificationChannelManager {
             
         }
     }
-
-    public void deleteAllChannel(PluginCall call) {
+public void deleteAllChannel(PluginCall call) {
     if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-       NotificationManager notificationManager =
-    (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-
+        NotificationManager notificationManager =
+            (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
         if (notificationManager != null) {
             List<NotificationChannel> channels = notificationManager.getNotificationChannels();
+            int count = 0;
             for (NotificationChannel channel : channels) {
                 notificationManager.deleteNotificationChannel(channel.getId());
+                count++;
             }
-            call.resolve();
+            JSObject result = new JSObject();
+            result.put("message", "Deleted " + count + " notification channels");
+            call.resolve(result);
         } else {
             call.reject("NotificationManager is null");
         }
-
     } else {
         call.unavailable("Notification channels are not supported below Android O (API 26).");
     }
-    }
+}
+
+    // public void deleteAllChannel(PluginCall call) {
+    // if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+    //    NotificationManager notificationManager =
+    // (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+
+
+    //     if (notificationManager != null) {
+    //         List<NotificationChannel> channels = notificationManager.getNotificationChannels();
+    //         for (NotificationChannel channel : channels) {
+    //             notificationManager.deleteNotificationChannel(channel.getId());
+    //         }
+    //         call.resolve();
+    //     } else {
+    //         call.reject("NotificationManager is null");
+    //     }
+
+    // } else {
+    //     call.unavailable("Notification channels are not supported below Android O (API 26).");
+    // }
+    // }
 
 
 
