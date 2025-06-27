@@ -79,7 +79,7 @@ public class NotificationChannelManager {
             NotificationChannel notificationChannel = new NotificationChannel(
                 channel.getString(CHANNEL_ID),
                 channel.getString(CHANNEL_NAME),
-                channel.getString(CHANNEL_IMPORTANCE)
+                channel.getInteger(CHANNEL_IMPORTANCE)
             );
             notificationChannel.setDescription(channel.getString(CHANNEL_DESCRIPTION));
             notificationChannel.setLockscreenVisibility(channel.getInteger(CHANNEL_VISIBILITY));
