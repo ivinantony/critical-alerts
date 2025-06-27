@@ -73,7 +73,8 @@ public class NotificationChannelManager {
         // 1. Remove old channel if it exists
         NotificationChannel existing = notificationManager.getNotificationChannel(channel.getString(CHANNEL_ID));
         if (existing != null) {
-            notificationManager.deleteNotificationChannel(channelId);
+           notificationManager.deleteNotificationChannel(channel.getString(CHANNEL_ID));
+            Logger.debug(Logger.tags("NotificationChannel"), "Deleted existing channel: " + channel.getString(CHANNEL_ID));
         }
         // 2. Create new channel
             NotificationChannel notificationChannel = new NotificationChannel(
