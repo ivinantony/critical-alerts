@@ -58,7 +58,7 @@ public class NotificationChannelManager {
             channel.put(CHANNEL_VISIBILITY, call.getInt(CHANNEL_VISIBILITY, NotificationCompat.VISIBILITY_PUBLIC));
             channel.put(CHANNEL_SOUND, call.getString(CHANNEL_SOUND, null));
             channel.put(CHANNEL_VIBRATE, call.getBoolean(CHANNEL_VIBRATE, false));
-            channel.put(BYPASS_DND, call.getBoolean(BYPASS_DND, true));
+            channel.put(BYPASS_DND, call.getBoolean(BYPASS_DND, false));
             channel.put(CHANNEL_USE_LIGHTS, call.getBoolean(CHANNEL_USE_LIGHTS, false));
             channel.put(CHANNEL_LIGHT_COLOR, call.getString(CHANNEL_LIGHT_COLOR, null));
             createChannel(channel);
@@ -70,10 +70,16 @@ public class NotificationChannelManager {
 
     public void createChannel(JSObject channel) {
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+        // 1. Remove old channel if it exists
+        NotificationChannel existing = notificationManager.getNotificationChannel(channel.getString(CHANNEL_ID));
+        if (existing != null) {
+            notificationManager.deleteNotificationChannel(channelId);
+        }
+        // 2. Create new channel
             NotificationChannel notificationChannel = new NotificationChannel(
                 channel.getString(CHANNEL_ID),
                 channel.getString(CHANNEL_NAME),
-              NotificationManager.IMPORTANCE_HIGH
+                channel.getString(CHANNEL_IMPORTANCE)
             );
             notificationChannel.setDescription(channel.getString(CHANNEL_DESCRIPTION));
             notificationChannel.setLockscreenVisibility(channel.getInteger(CHANNEL_VISIBILITY));
@@ -97,7 +103,6 @@ public class NotificationChannelManager {
                 AudioAttributes audioAttributes = new AudioAttributes.Builder()
                     .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
                      .setUsage(AudioAttributes.USAGE_NOTIFICATION)
-                //    .setUsage(AudioAttributes.USAGE_ALARM)
                     .build();
                 Uri soundUri = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + context.getPackageName() + "/raw/" + sound);
                 notificationChannel.setSound(soundUri, audioAttributes);
