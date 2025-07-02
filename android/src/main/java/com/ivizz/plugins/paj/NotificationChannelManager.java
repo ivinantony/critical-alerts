@@ -103,9 +103,9 @@ public class NotificationChannelManager {
                 }
                 AudioAttributes audioAttributes = new AudioAttributes.Builder()
                     .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
-                    // .setUsage(channel.getBool(BYPASS_DND) ? AudioAttributes.USAGE_ALARM : AudioAttributes.USAGE_NOTIFICATION) // ✅ Switch based on DND flag
-                    // //  .setUsage(AudioAttributes.USAGE_NOTIFICATION)
-                     .setUsage(AudioAttributes.USAGE_ALARM)
+                    .setUsage(channel.getBool(BYPASS_DND) ? AudioAttributes.USAGE_ALARM : AudioAttributes.USAGE_NOTIFICATION) // ✅ Switch based on DND flag
+                    //  .setUsage(AudioAttributes.USAGE_NOTIFICATION)
+                    //  .setUsage(AudioAttributes.USAGE_ALARM)
                     .build();
                 Uri soundUri = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + context.getPackageName() + "/raw/" + sound);
                 notificationChannel.setSound(soundUri, audioAttributes);
