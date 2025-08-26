@@ -1,6 +1,6 @@
 {
   "name": "critical-alerts",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Plugin for iOS Critical Alerts",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
