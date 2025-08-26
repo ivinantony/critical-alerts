@@ -115,7 +115,7 @@ public class NotificationChannelManager {
             
         }
     }
-public void deleteAllChannel(PluginCall call) {
+    public void deleteAllChannel(PluginCall call) {
     if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
         NotificationManager notificationManager =
             (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
@@ -136,57 +136,6 @@ public void deleteAllChannel(PluginCall call) {
     } else {
         call.unavailable("Notification channels are not supported below Android O (API 26).");
     }
-}
+    }
 
-    // public void deleteAllChannel(PluginCall call) {
-    // if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-    //    NotificationManager notificationManager =
-    // (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-
-
-    //     if (notificationManager != null) {
-    //         List<NotificationChannel> channels = notificationManager.getNotificationChannels();
-    //         for (NotificationChannel channel : channels) {
-    //             notificationManager.deleteNotificationChannel(channel.getId());
-    //         }
-    //         call.resolve();
-    //     } else {
-    //         call.reject("NotificationManager is null");
-    //     }
-
-    // } else {
-    //     call.unavailable("Notification channels are not supported below Android O (API 26).");
-    // }
-    // }
-
-
-
-
-
-    // public void listChannels(PluginCall call) {
-    //     if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-    //         List<NotificationChannel> notificationChannels = notificationManager.getNotificationChannels();
-    //         JSArray channels = new JSArray();
-    //         for (NotificationChannel notificationChannel : notificationChannels) {
-    //             JSObject channel = new JSObject();
-    //             channel.put(CHANNEL_ID, notificationChannel.getId());
-    //             channel.put(CHANNEL_NAME, notificationChannel.getName());
-    //             channel.put(CHANNEL_DESCRIPTION, notificationChannel.getDescription());
-    //             channel.put(CHANNEL_IMPORTANCE, notificationChannel.getImportance());
-    //             channel.put(CHANNEL_VISIBILITY, notificationChannel.getLockscreenVisibility());
-    //             channel.put(CHANNEL_SOUND, notificationChannel.getSound());
-    //             channel.put(CHANNEL_VIBRATE, notificationChannel.shouldVibrate());
-    //             channel.put(CHANNEL_USE_LIGHTS, notificationChannel.shouldShowLights());
-    //             channel.put(CHANNEL_LIGHT_COLOR, String.format("#%06X", (0xFFFFFF & notificationChannel.getLightColor())));
-    //             Logger.debug(Logger.tags("NotificationChannel"), "visibility " + notificationChannel.getLockscreenVisibility());
-    //             Logger.debug(Logger.tags("NotificationChannel"), "importance " + notificationChannel.getImportance());
-    //             channels.put(channel);
-    //         }
-    //         JSObject result = new JSObject();
-    //         result.put("channels", channels);
-    //         call.resolve(result);
-    //     } else {
-    //         call.unavailable();
-    //     }
-    // }
 }

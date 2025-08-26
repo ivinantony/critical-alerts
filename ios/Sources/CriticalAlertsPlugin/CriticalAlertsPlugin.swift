@@ -42,7 +42,6 @@ public class CriticalAlertsPlugin: CAPPlugin, CAPBridgedPlugin {
         UNUserNotificationCenter.current().getNotificationSettings { settings in
             let authorized = settings.authorizationStatus == .authorized
             let criticalEnabled = settings.criticalAlertSetting == .enabled
-
             DispatchQueue.main.async {
                 call.resolve([
                     "authorized": authorized,
