@@ -20,6 +20,7 @@ npx cap sync
 * [`checkDndAccess()`](#checkdndaccess)
 * [`openDndSettings()`](#opendndsettings)
 * [`createChannel(...)`](#createchannel)
+* [`deleteAllChannel()`](#deleteallchannel)
 * [Interfaces](#interfaces)
 * [Type Aliases](#type-aliases)
 
@@ -107,6 +108,15 @@ createChannel(channel: Channel) => Promise<void>
 | Param         | Type                                        |
 | ------------- | ------------------------------------------- |
 | **`channel`** | <code><a href="#channel">Channel</a></code> |
+
+--------------------
+
+
+### deleteAllChannel()
+
+```typescript
+deleteAllChannel() => Promise<void>
+```
 
 --------------------
 
