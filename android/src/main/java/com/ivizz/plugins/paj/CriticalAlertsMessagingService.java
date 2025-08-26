@@ -15,7 +15,7 @@ import com.google.firebase.messaging.RemoteMessage;
 
 import java.util.Map;
 
-public class MyFirebaseService extends FirebaseMessagingService {
+public class CriticalAlertsMessagingService extends FirebaseMessagingService {
 
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
