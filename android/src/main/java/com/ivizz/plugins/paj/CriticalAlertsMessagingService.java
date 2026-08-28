@@ -19,10 +19,8 @@ public class CriticalAlertsMessagingService extends FirebaseMessagingService {
 
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
-        // Only handle data payload
         if (remoteMessage.getData().size() > 0) {
-            Map<String, String> data = remoteMessage.getData();
-            showNotification(data);
+            showNotification(remoteMessage.getData());
         }
     }
 
@@ -31,17 +29,16 @@ public class CriticalAlertsMessagingService extends FirebaseMessagingService {
 
         String title = data.get("title");
         String body = data.get("body");
-        String sound = data.get("sound"); // optional
+        String sound = data.get("sound");
         String channelId = data.get("android_channel_id");
 
         if (channelId == null || channelId.isEmpty()) {
-            channelId = "default_channel"; // fallback
+            channelId = "default_channel";
         }
 
         NotificationManager notificationManager =
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
-        // Create channel if not exists (Oreo+)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel channel = notificationManager.getNotificationChannel(channelId);
             if (channel == null) {
@@ -53,41 +50,44 @@ public class CriticalAlertsMessagingService extends FirebaseMessagingService {
                 channel.enableVibration(true);
                 channel.enableLights(true);
 
-                if (sound != null) {
+                if (sound != null && !sound.isEmpty()) {
+                    String soundName = sound.contains(".") ? sound.substring(0, sound.lastIndexOf('.')) : sound;
                     Uri soundUri = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" +
-                            context.getPackageName() + "/raw/" + sound);
-
-                    channel.setSound(soundUri, getAudioAttributes(notificationManager));
+                            context.getPackageName() + "/raw/" + soundName);
+                    channel.setSound(soundUri, buildAudioAttributes(notificationManager));
                 }
 
                 notificationManager.createNotificationChannel(channel);
             }
         }
 
+        int iconRes = context.getResources().getIdentifier("ic_notification", "drawable", context.getPackageName());
+        if (iconRes == 0) {
+            iconRes = context.getApplicationInfo().icon;
+        }
+
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, channelId)
                 .setContentTitle(title != null ? title : "Notification")
                 .setContentText(body != null ? body : "")
-                .setSmallIcon(R.drawable.ic_notification)
+                .setSmallIcon(iconRes)
                 .setAutoCancel(true)
                 .setPriority(NotificationCompat.PRIORITY_HIGH);
 
-        // Set sound for pre-Oreo devices
-        if (sound != null && Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
+        if (sound != null && !sound.isEmpty() && Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
+            String soundName = sound.contains(".") ? sound.substring(0, sound.lastIndexOf('.')) : sound;
             Uri soundUri = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" +
-                    context.getPackageName() + "/raw/" + sound);
+                    context.getPackageName() + "/raw/" + soundName);
             builder.setSound(soundUri);
         }
 
         notificationManager.notify((int) System.currentTimeMillis(), builder.build());
     }
 
-    private AudioAttributes getAudioAttributes(NotificationManager nm) {
+    private AudioAttributes buildAudioAttributes(NotificationManager nm) {
         boolean hasDndAccess = false;
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             hasDndAccess = nm.isNotificationPolicyAccessGranted();
         }
-
         return new AudioAttributes.Builder()
                 .setUsage(hasDndAccess ? AudioAttributes.USAGE_ALARM : AudioAttributes.USAGE_NOTIFICATION)
                 .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)

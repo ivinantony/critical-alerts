@@ -1,12 +1,11 @@
 export interface CriticalAlertsPlugin {
-  echo(options: { value: string }): Promise<{ value: string }>;
   requestPermission(): Promise<{ granted: boolean }>;
   checkPermission(): Promise<{ authorized: boolean; criticalAlert: boolean }>;
-  openAppSettings(): Promise<{ granted: boolean }>;
+  openAppSettings(): Promise<{ opened: boolean }>;
   checkDndAccess(): Promise<{ granted: boolean }>;
-  openDndSettings(): Promise<{ granted: boolean }>;
+  openDndSettings(): Promise<{ opened: boolean }>;
   createChannel(channel: Channel): Promise<void>;
-  deleteAllChannel(): Promise<void>;
+  deleteAllChannels(): Promise<void>;
 }
 
 export interface Channel {
@@ -82,7 +81,7 @@ export interface Channel {
    */
   vibration?: boolean;
   /**
-   * Whether notifications posted in dnd or doze mode .
+   * Whether notifications posted in dnd or doze mode.
    *
    * @since 1.0.0
    */

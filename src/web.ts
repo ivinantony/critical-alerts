@@ -1,12 +1,8 @@
 import { WebPlugin } from '@capacitor/core';
 
-import type { CriticalAlertsPlugin } from './definitions';
+import type { Channel, CriticalAlertsPlugin } from './definitions';
 
 export class CriticalAlertsWeb extends WebPlugin implements CriticalAlertsPlugin {
-  async echo(options: { value: string }): Promise<{ value: string }> {
-    console.log('ECHO', options);
-    return options;
-  }
   async requestPermission(): Promise<{ granted: boolean }> {
     console.warn('CriticalAlerts plugin not available on web');
     return { granted: false };
@@ -16,25 +12,27 @@ export class CriticalAlertsWeb extends WebPlugin implements CriticalAlertsPlugin
     console.warn('CriticalAlerts plugin not available on web');
     return { authorized: false, criticalAlert: false };
   }
-  async openAppSettings(): Promise<{ granted: boolean }> {
+
+  async openAppSettings(): Promise<{ opened: boolean }> {
     console.warn('CriticalAlerts plugin not available on web');
-    return { granted: false };
+    return { opened: false };
   }
 
   async checkDndAccess(): Promise<{ granted: boolean }> {
     console.warn('CriticalAlerts plugin not available on web');
     return { granted: false };
   }
-  async openDndSettings(): Promise<{ granted: boolean }> {
+
+  async openDndSettings(): Promise<{ opened: boolean }> {
     console.warn('CriticalAlerts plugin not available on web');
-    return { granted: false };
+    return { opened: false };
   }
-  async createChannel(): Promise<void> {
+
+  async createChannel(_channel: Channel): Promise<void> {
     console.warn('CriticalAlerts plugin not available on web');
   }
-  async deleteAllChannel(): Promise<void> {
-    console.warn('deleteAllChannel is not available on the web.');
-    // Stub: resolve immediately without doing anything
-    return;
+
+  async deleteAllChannels(): Promise<void> {
+    console.warn('CriticalAlerts plugin not available on web');
   }
 }

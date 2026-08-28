@@ -7,11 +7,9 @@ import android.content.Context;
 import android.media.AudioAttributes;
 import android.net.Uri;
 import android.os.Build;
-import android.provider.Settings;
 import androidx.core.app.NotificationCompat;
 import com.getcapacitor.*;
 import com.getcapacitor.util.WebColor;
-import java.util.Arrays;
 import java.util.List;
 
 public class NotificationChannelManager {
@@ -62,7 +60,7 @@ public class NotificationChannelManager {
             channel.put(CHANNEL_USE_LIGHTS, call.getBoolean(CHANNEL_USE_LIGHTS, false));
             channel.put(CHANNEL_LIGHT_COLOR, call.getString(CHANNEL_LIGHT_COLOR, null));
             createChannel(channel);
-            call.resolve(channel);
+            call.resolve();
         } else {
             call.unavailable();
         }
@@ -70,13 +68,12 @@ public class NotificationChannelManager {
 
     public void createChannel(JSObject channel) {
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-        // 1. Remove old channel if it exists
-        NotificationChannel existing = notificationManager.getNotificationChannel(channel.getString(CHANNEL_ID));
-        if (existing != null) {
-           notificationManager.deleteNotificationChannel(channel.getString(CHANNEL_ID));
-            Logger.debug(Logger.tags("NotificationChannel"), "Deleted existing channel: " + channel.getString(CHANNEL_ID));
-        }
-        // 2. Create new channel
+            NotificationChannel existing = notificationManager.getNotificationChannel(channel.getString(CHANNEL_ID));
+            if (existing != null) {
+                notificationManager.deleteNotificationChannel(channel.getString(CHANNEL_ID));
+                Logger.debug(Logger.tags("NotificationChannel"), "Deleted existing channel: " + channel.getString(CHANNEL_ID));
+            }
+
             NotificationChannel notificationChannel = new NotificationChannel(
                 channel.getString(CHANNEL_ID),
                 channel.getString(CHANNEL_NAME),
@@ -87,7 +84,7 @@ public class NotificationChannelManager {
             notificationChannel.enableVibration(channel.getBool(CHANNEL_VIBRATE));
             notificationChannel.enableLights(channel.getBool(CHANNEL_USE_LIGHTS));
             notificationChannel.setBypassDnd(channel.getBool(BYPASS_DND));
-         
+
             String lightColor = channel.getString(CHANNEL_LIGHT_COLOR);
             if (lightColor != null) {
                 try {
@@ -96,6 +93,7 @@ public class NotificationChannelManager {
                     Logger.error(Logger.tags("NotificationChannel"), "Invalid color provided for light color.", null);
                 }
             }
+
             String sound = channel.getString(CHANNEL_SOUND, null);
             if (sound != null && !sound.isEmpty()) {
                 if (sound.contains(".")) {
@@ -103,39 +101,36 @@ public class NotificationChannelManager {
                 }
                 AudioAttributes audioAttributes = new AudioAttributes.Builder()
                     .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
-                    .setUsage(channel.getBool(BYPASS_DND) ? AudioAttributes.USAGE_ALARM : AudioAttributes.USAGE_NOTIFICATION) // ✅ Switch based on DND flag
-                    //  .setUsage(AudioAttributes.USAGE_NOTIFICATION)
-                    //  .setUsage(AudioAttributes.USAGE_ALARM)
+                    .setUsage(channel.getBool(BYPASS_DND) ? AudioAttributes.USAGE_ALARM : AudioAttributes.USAGE_NOTIFICATION)
                     .build();
                 Uri soundUri = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + context.getPackageName() + "/raw/" + sound);
                 notificationChannel.setSound(soundUri, audioAttributes);
             }
 
-        notificationManager.createNotificationChannel(notificationChannel);
-            
+            notificationManager.createNotificationChannel(notificationChannel);
         }
     }
-    public void deleteAllChannel(PluginCall call) {
-    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-        NotificationManager notificationManager =
-            (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
-        if (notificationManager != null) {
-            List<NotificationChannel> channels = notificationManager.getNotificationChannels();
-            int count = 0;
-            for (NotificationChannel channel : channels) {
-                notificationManager.deleteNotificationChannel(channel.getId());
-                count++;
+    public void deleteAllChannels(PluginCall call) {
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            NotificationManager notificationManager =
+                (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+
+            if (notificationManager != null) {
+                List<NotificationChannel> channels = notificationManager.getNotificationChannels();
+                int count = 0;
+                for (NotificationChannel channel : channels) {
+                    notificationManager.deleteNotificationChannel(channel.getId());
+                    count++;
+                }
+                JSObject result = new JSObject();
+                result.put("message", "Deleted " + count + " notification channels");
+                call.resolve(result);
+            } else {
+                call.reject("NotificationManager is null");
             }
-            JSObject result = new JSObject();
-            result.put("message", "Deleted " + count + " notification channels");
-            call.resolve(result);
         } else {
-            call.reject("NotificationManager is null");
+            call.unavailable("Notification channels are not supported below Android O (API 26).");
         }
-    } else {
-        call.unavailable("Notification channels are not supported below Android O (API 26).");
     }
-    }
-
 }
