@@ -111,6 +111,20 @@ public class NotificationChannelManager {
         }
     }
 
+    public void deleteChannel(PluginCall call) {
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            String id = call.getString("id");
+            if (id == null || id.isEmpty()) {
+                call.reject("Channel id is required");
+                return;
+            }
+            notificationManager.deleteNotificationChannel(id);
+            call.resolve();
+        } else {
+            call.unavailable("Notification channels are not supported below Android O (API 26).");
+        }
+    }
+
     public void deleteAllChannels(PluginCall call) {
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
             NotificationManager notificationManager =

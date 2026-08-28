@@ -3,9 +3,9 @@ import { WebPlugin } from '@capacitor/core';
 import type { Channel, CriticalAlertsPlugin } from './definitions';
 
 export class CriticalAlertsWeb extends WebPlugin implements CriticalAlertsPlugin {
-  async requestPermission(): Promise<{ granted: boolean }> {
+  async requestPermission(): Promise<{ granted: boolean; criticalAlert: boolean }> {
     console.warn('CriticalAlerts plugin not available on web');
-    return { granted: false };
+    return { granted: false, criticalAlert: false };
   }
 
   async checkPermission(): Promise<{ authorized: boolean; criticalAlert: boolean }> {
@@ -32,7 +32,16 @@ export class CriticalAlertsWeb extends WebPlugin implements CriticalAlertsPlugin
     console.warn('CriticalAlerts plugin not available on web');
   }
 
+  async deleteChannel(_options: { id: string }): Promise<void> {
+    console.warn('CriticalAlerts plugin not available on web');
+  }
+
   async deleteAllChannels(): Promise<void> {
     console.warn('CriticalAlerts plugin not available on web');
+  }
+
+  async getToken(): Promise<{ token: string }> {
+    console.warn('CriticalAlerts plugin not available on web');
+    return { token: '' };
   }
 }

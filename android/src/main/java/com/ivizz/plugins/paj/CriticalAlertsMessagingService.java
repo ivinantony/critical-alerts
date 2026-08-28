@@ -17,6 +17,17 @@ import java.util.Map;
 
 public class CriticalAlertsMessagingService extends FirebaseMessagingService {
 
+    private static final String PREFS_NAME = "CriticalAlertsPlugin";
+    private static final String KEY_TOKEN = "fcm_token";
+
+    @Override
+    public void onNewToken(String token) {
+        getSharedPreferences(PREFS_NAME, MODE_PRIVATE)
+                .edit()
+                .putString(KEY_TOKEN, token)
+                .apply();
+    }
+
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
         if (remoteMessage.getData().size() > 0) {
@@ -42,6 +53,9 @@ public class CriticalAlertsMessagingService extends FirebaseMessagingService {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel channel = notificationManager.getNotificationChannel(channelId);
             if (channel == null) {
+                boolean hasDndAccess = Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
+                        && notificationManager.isNotificationPolicyAccessGranted();
+
                 channel = new NotificationChannel(
                         channelId,
                         "Custom Channel",
@@ -49,6 +63,7 @@ public class CriticalAlertsMessagingService extends FirebaseMessagingService {
                 );
                 channel.enableVibration(true);
                 channel.enableLights(true);
+                channel.setBypassDnd(hasDndAccess);
 
                 if (sound != null && !sound.isEmpty()) {
                     String soundName = sound.contains(".") ? sound.substring(0, sound.lastIndexOf('.')) : sound;

@@ -18,6 +18,7 @@ import com.getcapacitor.PluginMethod;
 import com.getcapacitor.annotation.CapacitorPlugin;
 import com.getcapacitor.annotation.Permission;
 import com.getcapacitor.annotation.PermissionCallback;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 @CapacitorPlugin(
     name = "CriticalAlerts",
@@ -42,6 +43,7 @@ public class CriticalAlertsPlugin extends Plugin {
                     == PackageManager.PERMISSION_GRANTED) {
                 JSObject result = new JSObject();
                 result.put("granted", true);
+                result.put("criticalAlert", false);
                 call.resolve(result);
             } else {
                 requestPermissionForAlias("notifications", call, "notificationPermissionCallback");
@@ -49,6 +51,7 @@ public class CriticalAlertsPlugin extends Plugin {
         } else {
             JSObject result = new JSObject();
             result.put("granted", NotificationManagerCompat.from(getContext()).areNotificationsEnabled());
+            result.put("criticalAlert", false);
             call.resolve(result);
         }
     }
@@ -57,6 +60,7 @@ public class CriticalAlertsPlugin extends Plugin {
     private void notificationPermissionCallback(PluginCall call) {
         JSObject result = new JSObject();
         result.put("granted", getPermissionState("notifications") == PermissionState.GRANTED);
+        result.put("criticalAlert", false);
         call.resolve(result);
     }
 
@@ -110,7 +114,28 @@ public class CriticalAlertsPlugin extends Plugin {
     }
 
     @PluginMethod
+    public void deleteChannel(PluginCall call) {
+        notificationChannelManager.deleteChannel(call);
+    }
+
+    @PluginMethod
     public void deleteAllChannels(PluginCall call) {
         notificationChannelManager.deleteAllChannels(call);
+    }
+
+    @PluginMethod
+    public void getToken(PluginCall call) {
+        call.setKeepAlive(true);
+        FirebaseMessaging.getInstance().getToken().addOnCompleteListener(task -> {
+            call.setKeepAlive(false);
+            if (!task.isSuccessful()) {
+                call.reject("Failed to get FCM token",
+                        task.getException() != null ? task.getException().getMessage() : null);
+                return;
+            }
+            JSObject result = new JSObject();
+            result.put("token", task.getResult());
+            call.resolve(result);
+        });
     }
 }

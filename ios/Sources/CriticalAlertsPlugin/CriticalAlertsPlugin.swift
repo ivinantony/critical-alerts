@@ -14,17 +14,24 @@ public class CriticalAlertsPlugin: CAPPlugin, CAPBridgedPlugin {
         CAPPluginMethod(name: "checkDndAccess", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "openDndSettings", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "createChannel", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "deleteChannel", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "deleteAllChannels", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "getToken", returnType: CAPPluginReturnPromise),
     ]
 
     @objc func requestPermission(_ call: CAPPluginCall) {
         let options: UNAuthorizationOptions = [.alert, .sound, .badge, .criticalAlert]
         UNUserNotificationCenter.current().requestAuthorization(options: options) { granted, error in
-            DispatchQueue.main.async {
-                if let error = error {
-                    call.reject("Request failed", nil, error)
-                } else {
-                    call.resolve(["granted": granted])
+            if let error = error {
+                DispatchQueue.main.async { call.reject("Request failed", nil, error) }
+                return
+            }
+            UNUserNotificationCenter.current().getNotificationSettings { settings in
+                DispatchQueue.main.async {
+                    call.resolve([
+                        "granted": granted,
+                        "criticalAlert": settings.criticalAlertSetting == .enabled
+                    ])
                 }
             }
         }
@@ -83,7 +90,18 @@ public class CriticalAlertsPlugin: CAPPlugin, CAPBridgedPlugin {
     }
 
     // Notification channels are an Android concept; no-op on iOS.
+    @objc func deleteChannel(_ call: CAPPluginCall) {
+        call.resolve()
+    }
+
+    // Notification channels are an Android concept; no-op on iOS.
     @objc func deleteAllChannels(_ call: CAPPluginCall) {
         call.resolve()
+    }
+
+    // FCM token retrieval is handled by the Firebase iOS SDK, not this plugin.
+    // Integrate FirebaseMessaging in your app and call Messaging.messaging().fcmToken.
+    @objc func getToken(_ call: CAPPluginCall) {
+        call.reject("getToken is not supported on iOS. Use the Firebase iOS SDK: Messaging.messaging().fcmToken")
     }
 }
