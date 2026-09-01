@@ -1,40 +1,47 @@
 import { WebPlugin } from '@capacitor/core';
 
-import type { CriticalAlertsPlugin } from './definitions';
+import type { Channel, CriticalAlertsPlugin } from './definitions';
 
 export class CriticalAlertsWeb extends WebPlugin implements CriticalAlertsPlugin {
-  async echo(options: { value: string }): Promise<{ value: string }> {
-    console.log('ECHO', options);
-    return options;
-  }
-  async requestPermission(): Promise<{ granted: boolean }> {
+  async requestPermission(): Promise<{ granted: boolean; criticalAlert: boolean }> {
     console.warn('CriticalAlerts plugin not available on web');
-    return { granted: false };
+    return { granted: false, criticalAlert: false };
   }
 
   async checkPermission(): Promise<{ authorized: boolean; criticalAlert: boolean }> {
     console.warn('CriticalAlerts plugin not available on web');
     return { authorized: false, criticalAlert: false };
   }
-  async openAppSettings(): Promise<{ granted: boolean }> {
+
+  async openAppSettings(): Promise<{ opened: boolean }> {
     console.warn('CriticalAlerts plugin not available on web');
-    return { granted: false };
+    return { opened: false };
   }
 
   async checkDndAccess(): Promise<{ granted: boolean }> {
     console.warn('CriticalAlerts plugin not available on web');
     return { granted: false };
   }
-  async openDndSettings(): Promise<{ granted: boolean }> {
+
+  async openDndSettings(): Promise<{ opened: boolean }> {
     console.warn('CriticalAlerts plugin not available on web');
-    return { granted: false };
+    return { opened: false };
   }
-  async createChannel(): Promise<void> {
+
+  async createChannel(_channel: Channel): Promise<void> {
     console.warn('CriticalAlerts plugin not available on web');
   }
-  async deleteAllChannel(): Promise<void> {
-    console.warn('deleteAllChannel is not available on the web.');
-    // Stub: resolve immediately without doing anything
-    return;
+
+  async deleteChannel(_options: { id: string }): Promise<void> {
+    console.warn('CriticalAlerts plugin not available on web');
+  }
+
+  async deleteAllChannels(): Promise<void> {
+    console.warn('CriticalAlerts plugin not available on web');
+  }
+
+  async getToken(): Promise<{ token: string }> {
+    console.warn('CriticalAlerts plugin not available on web');
+    return { token: '' };
   }
 }
